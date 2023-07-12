@@ -1,7 +1,7 @@
 ### Developer | INTP | VRChat | BD... 
 [Escape to Steppe Prairies: A Tranquil World for Rest and Rejuvenation in VRChat](https://youtu.be/gjcEfg1aG3Y)
-在VRChat，不敢相信，当初只是为了名字上能显示玉桂狗作为装饰而创建了一个对应的VRC群，现在有上万人了.
-I never really thought about it and it's kind of hard to believe, but this VRC group I created just to have a Cinnamoroll banner on the nameplates now has over ten thousand members.
+在VRChat，不敢相信，当初只是为了名字上能显示玉桂狗作为装饰而创建了一个对应的VRC群，现在有上万人了.  
+I never really thought about it and it's kind of hard to believe, but this VRC group I created just to have a Cinnamoroll banner on the nameplates now has over ten thousand members.  
 
 
 <!--
