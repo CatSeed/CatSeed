@@ -1,5 +1,7 @@
 ### Developer | INTP | VRChat | BD... 
 沉迷 VRChat | Hooked on VRChat  
+[VRC个人页面 | VRC profile](https://vrchat.com/home/user/usr_8669b6ce-1500-4ac1-8ad6-c0f2081ae4b7)  
+  
 ![VRChatGamePlayTime](http://osu.baka9.cn/VRChatGamePlayTime.php)  
 [Escape to Steppe Prairies: A Tranquil World for Rest and Rejuvenation in VRChat](https://youtu.be/gjcEfg1aG3Y)  
 在VRChat，不敢相信，当初只是为了名字上能显示玉桂狗作为装饰而创建了一个对应的VRC群，现在有上万人了。  
