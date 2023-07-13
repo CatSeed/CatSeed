@@ -2,9 +2,9 @@
 沉迷 VRChat | Hooked on VRChat  
 ![VRChatGamePlayTime](http://osu.baka9.cn/VRChatGamePlayTime.php)  
 [Escape to Steppe Prairies: A Tranquil World for Rest and Rejuvenation in VRChat](https://youtu.be/gjcEfg1aG3Y)  
-在VRChat，不敢相信，当初只是为了名字上能显示玉桂狗作为装饰而创建了一个对应的VRC群，现在有上万人了.  
-I never really thought about it and it's kind of hard to believe, but this group in VRChat I created just to have a Cinnamoroll banner on the nameplates now has over ten thousand members.  
-[群组链接 | This Group Link](https://vrc.group/SANRIO.9632)
+在VRChat，不敢相信，当初只是为了名字上能显示玉桂狗作为装饰而创建了一个对应的VRC群，现在有上万人了。  
+I never really thought about it and it's kind of hard to believe, but this group I created in VRChat just to have a Cinnamoroll banner on the nameplates now has over ten thousand members.  
+[群组链接 | This Group Link](https://vrc.group/SANRIO.9632)  
 ![The Cinnamoroll Group in VRChat](https://github.com/CatSeed/CatSeed/blob/main/Cinnamoroll%20Group%20in%20VRChat.png)  
 
 
