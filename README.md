@@ -1,5 +1,4 @@
-### ❤&nbsp;❤&nbsp;❤❤&nbsp;&nbsp;&nbsp;❤❤&nbsp;&nbsp;❤&nbsp;❤&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;❤&nbsp;❤&nbsp;❤&nbsp;❤❤  
-  
+![BackgroundHeartsEmoji](https://github.com/CatSeed/CatSeed/blob/main/BackgroundHeartsEmoji.png)  
 ### Developer | INTP | VRChat | BD... 
 沉迷 VRChat | Hooked on VRChat  
 [VRC个人页面 | VRC profile](https://vrchat.com/home/user/usr_8669b6ce-1500-4ac1-8ad6-c0f2081ae4b7)  
@@ -11,7 +10,7 @@ I never really thought about it and it's kind of hard to believe, but this group
 [群组链接 | This Group Link](https://vrc.group/SANRIO.9632)  
 ![The Cinnamoroll Group in VRChat](https://github.com/CatSeed/CatSeed/blob/main/Cinnamoroll%20Group%20in%20VRChat.png)  
 
-
+### ❤&nbsp;❤&nbsp;❤❤&nbsp;&nbsp;&nbsp;❤❤&nbsp;&nbsp;❤&nbsp;❤&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;❤&nbsp;❤&nbsp;❤&nbsp;❤❤  
 <!--
 **CatSeed/CatSeed** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 
