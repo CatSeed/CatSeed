@@ -28,7 +28,6 @@ jobs:
       - name: Generate GitHub statistics SVGs
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PROFILE_REPOS_TOKEN: ${{ secrets.PROFILE_REPOS_TOKEN }}
           PROFILE_ACTIVITY_TOKEN: ${{ secrets.PROFILE_ACTIVITY_TOKEN }}
         run: python scripts/generate_profile.py
 
