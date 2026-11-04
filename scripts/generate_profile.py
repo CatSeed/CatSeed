@@ -11,42 +11,54 @@ from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
 USER = "CatSeed"
-TOKEN = os.getenv("GH_TOKEN") or os.getenv("GITHUB_TOKEN", "")
+PUBLIC_TOKEN = os.getenv("GH_TOKEN") or os.getenv("GITHUB_TOKEN", "")
+REPOS_TOKEN = os.getenv("PROFILE_REPOS_TOKEN", "")
+ACTIVITY_TOKEN = os.getenv("PROFILE_ACTIVITY_TOKEN", "")
 OUT = Path("dist")
 OUT.mkdir(exist_ok=True)
 
 
-def request_json(url, payload=None):
+def request_json(url, payload=None, token=None):
     body = json.dumps(payload).encode("utf-8") if payload is not None else None
     headers = {
         "Accept": "application/vnd.github+json",
         "User-Agent": "CatSeed-profile-workflow",
         "X-GitHub-Api-Version": "2022-11-28",
     }
-    if TOKEN:
-        headers["Authorization"] = f"Bearer {TOKEN}"
+    if token is None:
+        token = PUBLIC_TOKEN
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
     if body is not None:
         headers["Content-Type"] = "application/json"
     try:
         with urlopen(Request(url, data=body, headers=headers), timeout=25) as response:
             return json.load(response)
     except HTTPError as exc:
-        raise RuntimeError(f"GitHub API returned HTTP {exc.code}: {url}") from exc
+        # Never print API endpoints: private repository paths must not leak into public logs.
+        raise RuntimeError(f"GitHub API request failed (HTTP {exc.code})") from exc
 
 
 def get_languages():
+    if REPOS_TOKEN:
+        actor = request_json("https://api.github.com/user", token=REPOS_TOKEN)
+        if actor.get("login", "").lower() != USER.lower():
+            raise RuntimeError("PROFILE_REPOS_TOKEN belongs to the wrong GitHub account")
     totals = Counter()
     counted = 0
     page = 1
     while page <= 10:
-        repos = request_json(f"https://api.github.com/users/{USER}/repos?per_page=100&page={page}&type=owner")
+        if REPOS_TOKEN:
+            repos = request_json(f"https://api.github.com/user/repos?per_page=100&page={page}&affiliation=owner&visibility=all", token=REPOS_TOKEN)
+        else:
+            repos = request_json(f"https://api.github.com/users/{USER}/repos?per_page=100&page={page}&type=owner")
         if not isinstance(repos, list):
             raise RuntimeError(f"Unexpected repositories response: {repos}")
         for repo in repos:
-            if repo.get("fork") or repo.get("private") or repo.get("archived"):
+            if repo.get("fork") or repo.get("archived") or (repo.get("private") and not REPOS_TOKEN):
                 continue
             counted += 1
-            languages = request_json(repo["languages_url"])
+            languages = request_json(repo["languages_url"], token=REPOS_TOKEN or PUBLIC_TOKEN)
             for language, size in languages.items():
                 if size > 0:
                     totals[language] += size
@@ -54,11 +66,15 @@ def get_languages():
             break
         page += 1
     if not totals:
-        raise RuntimeError("No languages returned from public, non-fork repositories")
+        raise RuntimeError("No languages returned from repositories visible to the selected token")
     return totals, counted
 
 
 def get_activity():
+    if ACTIVITY_TOKEN:
+        actor = request_json("https://api.github.com/user", token=ACTIVITY_TOKEN)
+        if actor.get("login", "").lower() != USER.lower():
+            raise RuntimeError("PROFILE_ACTIVITY_TOKEN belongs to the wrong GitHub account")
     now = dt.datetime.now(dt.timezone.utc)
     dates = [(now.date() - dt.timedelta(days=i)) for i in range(30, -1, -1)]
     begin = dt.datetime.combine(dates[0], dt.time.min, tzinfo=dt.timezone.utc)
@@ -71,7 +87,7 @@ def get_activity():
         graph = request_json("https://api.github.com/graphql", {
             "query": query,
             "variables": {"login": USER, "from": begin.isoformat(), "to": now.isoformat()}
-        })
+        }, token=ACTIVITY_TOKEN or PUBLIC_TOKEN)
         if graph.get("errors"):
             raise RuntimeError(str(graph["errors"])[:250])
         weeks = graph["data"]["user"]["contributionsCollection"]["contributionCalendar"]["weeks"]
@@ -79,9 +95,12 @@ def get_activity():
         values = [date_to_count.get(day.isoformat(), 0) for day in dates]
         if not date_to_count:
             raise RuntimeError("Empty contribution calendar")
-        return dates, values, "GitHub contributions", "Daily contributions over the last 31 days"
+        label = "Public + private GitHub contributions" if ACTIVITY_TOKEN else "Public contributions (private not verified)"
+        return dates, values, label, "GitHub contribution calendar, last 31 days"
     except Exception as exc:
-        print(f"GraphQL contributions unavailable: {exc}. Trying public events.")
+        if ACTIVITY_TOKEN:
+            raise RuntimeError("Private contribution query failed: check read:user permission") from exc
+        print("Public contribution calendar unavailable; falling back to public events.")
         counts = Counter()
         seen = set()
         for page in range(1, 4):
@@ -100,7 +119,7 @@ def get_activity():
         if not seen:
             raise RuntimeError("Neither contribution calendar nor public events are available")
         values = [counts[day.isoformat()] for day in dates]
-        return dates, values, "Public GitHub events", "Recent public events (GitHub API retains at most 300)"
+        return dates, values, "Public GitHub events only", "Public events only; this is not a complete contribution calendar."
 
 
 def svg_frame(inner, width, height, title, note):
@@ -126,7 +145,8 @@ def language_svg(totals, repo_count):
         rows.append(f'<rect x="185" y="{y-7}" width="{barw:.2f}" height="11" rx="2" fill="{colors[i]}"/>')
         rows.append(f'<text x="636" y="{y+6}" text-anchor="end" fill="#c9d1d9" font-family="Arial,sans-serif" font-size="12">{percentage:.1f}%</text>')
     rows.append('<text x="25" y="340" fill="#8b949e" font-family="Arial,sans-serif" font-size="10">Share of detected language bytes; not proficiency or coding time.</text>')
-    return svg_frame("\n".join(rows), width, height, "LANGUAGE INVENTORY", f"Public, non-fork, non-archived repositories: {repo_count}")
+    label = "Public + authorised private repos" if REPOS_TOKEN else "Public repos only — private access not configured"
+    return svg_frame("\n".join(rows), width, height, "LANGUAGE INVENTORY", label)
 
 
 def activity_svg(dates, values, source, caption):
@@ -165,8 +185,8 @@ def main():
     dates, counts, source, caption = get_activity()
     (OUT / "languages.svg").write_text(language_svg(totals, nrepos), encoding="utf-8")
     (OUT / "activity.svg").write_text(activity_svg(dates, counts, source, caption), encoding="utf-8")
-    print(f"Generated languages.svg for {nrepos} repositories; languages: {dict(totals.most_common(8))}")
-    print(f"Generated activity.svg with {sum(counts)} {source.lower()} in 31 days")
+    print("Generated language distribution (no repository names or raw language sizes logged).")
+    print("Generated contribution activity (daily totals only; no private repository details logged).")
 
 
 if __name__ == "__main__":
