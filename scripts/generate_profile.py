@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Generate profile SVG cards from GitHub's public API, without third-party renderers."""
 import datetime as dt
+import hashlib
 import html
 import json
 import math
@@ -35,6 +36,17 @@ def request_json(url, payload=None, token=None):
         with urlopen(Request(url, data=body, headers=headers), timeout=25) as response:
             return json.load(response)
     except HTTPError as exc:
+        # Diagnostics for authentication failures only. Never print tokens or repo paths.
+        # The truncated SHA-256 lets the owner compare the runner's secret with a local
+        # token without exposing either value. GitHub PATs have high entropy.
+        if exc.code == 401 and token and token == REPOS_TOKEN:
+            fingerprint = hashlib.sha256(token.encode("utf-8")).hexdigest()[:16]
+            token_type = ("classic" if token.startswith("ghp_") else
+                          "fine-grained" if token.startswith("github_pat_") else "other")
+            has_whitespace = token != token.strip()
+            print(f"PROFILE_REPOS_TOKEN auth diagnostic: type={token_type}, "
+                  f"length={len(token)}, sha256_prefix16={fingerprint}, "
+                  f"edge_whitespace={has_whitespace}", flush=True)
         # Never print API endpoints: private repository paths must not leak into public logs.
         raise RuntimeError(f"GitHub API request failed (HTTP {exc.code})") from exc
 
