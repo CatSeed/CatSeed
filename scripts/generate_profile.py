@@ -48,6 +48,8 @@ def get_languages():
     counted = 0
     private_count = 0
     public_count = 0
+    visible_private_count = 0
+    visible_public_count = 0
     page = 1
     while page <= 10:
         if REPOS_TOKEN:
@@ -57,6 +59,10 @@ def get_languages():
         if not isinstance(repos, list):
             raise RuntimeError(f"Unexpected repositories response: {repos}")
         for repo in repos:
+            if repo.get("private"):
+                visible_private_count += 1
+            else:
+                visible_public_count += 1
             if repo.get("fork") or repo.get("archived") or (repo.get("private") and not REPOS_TOKEN):
                 continue
             counted += 1
@@ -73,8 +79,11 @@ def get_languages():
         page += 1
     if not totals:
         raise RuntimeError("No languages returned from repositories visible to the selected token")
+    print(f"Token-visible repository totals: {visible_public_count} public, {visible_private_count} private (before fork/archive exclusion).", flush=True)
     if REPOS_TOKEN and private_count == 0:
-        raise RuntimeError("PROFILE_REPOS_TOKEN was supplied, but zero private repositories were returned. Verify All repositories access and permissions.")
+        if visible_private_count == 0:
+            raise RuntimeError("PROFILE_REPOS_TOKEN cannot see any private repositories. Edit its Repository access scope to All repositories and update the Actions secret if you generated a new token.")
+        raise RuntimeError("Private repositories are visible to the token, but all were excluded as forked or archived.")
     print(f"Language API inventory: {public_count} public and {private_count} private repositories (names intentionally omitted).")
     return totals, counted, private_count
 
