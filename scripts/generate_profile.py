@@ -46,6 +46,8 @@ def get_languages():
             raise RuntimeError("PROFILE_REPOS_TOKEN belongs to the wrong GitHub account")
     totals = Counter()
     counted = 0
+    private_count = 0
+    public_count = 0
     page = 1
     while page <= 10:
         if REPOS_TOKEN:
@@ -58,6 +60,10 @@ def get_languages():
             if repo.get("fork") or repo.get("archived") or (repo.get("private") and not REPOS_TOKEN):
                 continue
             counted += 1
+            if repo.get("private"):
+                private_count += 1
+            else:
+                public_count += 1
             languages = request_json(repo["languages_url"], token=REPOS_TOKEN or PUBLIC_TOKEN)
             for language, size in languages.items():
                 if size > 0:
@@ -67,7 +73,10 @@ def get_languages():
         page += 1
     if not totals:
         raise RuntimeError("No languages returned from repositories visible to the selected token")
-    return totals, counted
+    if REPOS_TOKEN and private_count == 0:
+        raise RuntimeError("PROFILE_REPOS_TOKEN was supplied, but zero private repositories were returned. Verify All repositories access and permissions.")
+    print(f"Language API inventory: {public_count} public and {private_count} private repositories (names intentionally omitted).")
+    return totals, counted, private_count
 
 
 def get_activity():
@@ -80,6 +89,8 @@ def get_activity():
     begin = dt.datetime.combine(dates[0], dt.time.min, tzinfo=dt.timezone.utc)
     query = """query($login:String!, $from:DateTime!, $to:DateTime!){
       user(login:$login){contributionsCollection(from:$from,to:$to){
+        restrictedContributionsCount
+        hasAnyRestrictedContributions
         contributionCalendar{weeks{contributionDays{date contributionCount}}}
       }}
     }"""
@@ -90,12 +101,22 @@ def get_activity():
         }, token=ACTIVITY_TOKEN or PUBLIC_TOKEN)
         if graph.get("errors"):
             raise RuntimeError(str(graph["errors"])[:250])
-        weeks = graph["data"]["user"]["contributionsCollection"]["contributionCalendar"]["weeks"]
+        collection = graph["data"]["user"]["contributionsCollection"]
+        weeks = collection["contributionCalendar"]["weeks"]
         date_to_count = {day["date"]: day["contributionCount"] for week in weeks for day in week["contributionDays"]}
         values = [date_to_count.get(day.isoformat(), 0) for day in dates]
         if not date_to_count:
             raise RuntimeError("Empty contribution calendar")
-        label = "Public + private GitHub contributions" if ACTIVITY_TOKEN else "Public contributions (private not verified)"
+        restricted = collection.get("restrictedContributionsCount", 0)
+        if ACTIVITY_TOKEN:
+            label = "GitHub contributions (private-access token)"
+            print("Activity API used the authorized private-contribution token.")
+            if restricted > 0:
+                print("GitHub confirmed private/restricted contributions in this period.")
+            else:
+                print("No restricted contributions were confirmed. This does not prove that no private commits occurred.")
+        else:
+            label = "Public contributions (private not verified)"
         return dates, values, label, "GitHub contribution calendar, last 31 days"
     except Exception as exc:
         if ACTIVITY_TOKEN:
@@ -131,7 +152,7 @@ def svg_frame(inner, width, height, title, note):
 </svg>'''
 
 
-def language_svg(totals, repo_count):
+def language_svg(totals, repo_count, private_count):
     width, height = 670, 355
     total = sum(totals.values())
     colors = ["#39d353", "#7ee787", "#2ea44f", "#80cc9a", "#31724d", "#a8e5bd", "#267448"]
@@ -145,7 +166,7 @@ def language_svg(totals, repo_count):
         rows.append(f'<rect x="185" y="{y-7}" width="{barw:.2f}" height="11" rx="2" fill="{colors[i]}"/>')
         rows.append(f'<text x="636" y="{y+6}" text-anchor="end" fill="#c9d1d9" font-family="Arial,sans-serif" font-size="12">{percentage:.1f}%</text>')
     rows.append('<text x="25" y="340" fill="#8b949e" font-family="Arial,sans-serif" font-size="10">Share of detected language bytes; not proficiency or coding time.</text>')
-    label = "Public + authorised private repos" if REPOS_TOKEN else "Public repos only — private access not configured"
+    label = "Public + verified private repositories" if REPOS_TOKEN and private_count > 0 else "Public repos only"
     return svg_frame("\n".join(rows), width, height, "LANGUAGE INVENTORY", label)
 
 
@@ -181,9 +202,9 @@ def activity_svg(dates, values, source, caption):
 
 
 def main():
-    totals, nrepos = get_languages()
+    totals, nrepos, nprivate = get_languages()
     dates, counts, source, caption = get_activity()
-    (OUT / "languages.svg").write_text(language_svg(totals, nrepos), encoding="utf-8")
+    (OUT / "languages.svg").write_text(language_svg(totals, nrepos, nprivate), encoding="utf-8")
     (OUT / "activity.svg").write_text(activity_svg(dates, counts, source, caption), encoding="utf-8")
     print("Generated language distribution (no repository names or raw language sizes logged).")
     print("Generated contribution activity (daily totals only; no private repository details logged).")
