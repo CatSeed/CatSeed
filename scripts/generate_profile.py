@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Generate profile SVG cards from GitHub's public API, without third-party renderers."""
 import datetime as dt
-import hashlib
 import html
 import json
 import math
@@ -13,8 +12,9 @@ from urllib.request import Request, urlopen
 
 USER = "CatSeed"
 PUBLIC_TOKEN = os.getenv("GH_TOKEN") or os.getenv("GITHUB_TOKEN", "")
-REPOS_TOKEN = os.getenv("PROFILE_REPOS_TOKEN", "")
 ACTIVITY_TOKEN = os.getenv("PROFILE_ACTIVITY_TOKEN", "")
+# One verified fine-grained PAT powers both the private repository inventory and activity.
+LANGUAGE_TOKEN = ACTIVITY_TOKEN
 OUT = Path("dist")
 OUT.mkdir(exist_ok=True)
 
@@ -36,26 +36,16 @@ def request_json(url, payload=None, token=None):
         with urlopen(Request(url, data=body, headers=headers), timeout=25) as response:
             return json.load(response)
     except HTTPError as exc:
-        # Diagnostics for authentication failures only. Never print tokens or repo paths.
-        # The truncated SHA-256 lets the owner compare the runner's secret with a local
-        # token without exposing either value. GitHub PATs have high entropy.
-        if exc.code == 401 and token and token == REPOS_TOKEN:
-            fingerprint = hashlib.sha256(token.encode("utf-8")).hexdigest()[:16]
-            token_type = ("classic" if token.startswith("ghp_") else
-                          "fine-grained" if token.startswith("github_pat_") else "other")
-            has_whitespace = token != token.strip()
-            print(f"PROFILE_REPOS_TOKEN auth diagnostic: type={token_type}, "
-                  f"length={len(token)}, sha256_prefix16={fingerprint}, "
-                  f"edge_whitespace={has_whitespace}", flush=True)
         # Never print API endpoints: private repository paths must not leak into public logs.
         raise RuntimeError(f"GitHub API request failed (HTTP {exc.code})") from exc
 
 
 def get_languages():
-    if REPOS_TOKEN:
-        actor = request_json("https://api.github.com/user", token=REPOS_TOKEN)
-        if actor.get("login", "").lower() != USER.lower():
-            raise RuntimeError("PROFILE_REPOS_TOKEN belongs to the wrong GitHub account")
+    if not LANGUAGE_TOKEN:
+        raise RuntimeError("PROFILE_ACTIVITY_TOKEN is missing; private repository languages cannot be counted")
+    actor = request_json("https://api.github.com/user", token=LANGUAGE_TOKEN)
+    if actor.get("login", "").lower() != USER.lower():
+        raise RuntimeError("PROFILE_ACTIVITY_TOKEN belongs to the wrong GitHub account")
     totals = Counter()
     counted = 0
     private_count = 0
@@ -64,10 +54,7 @@ def get_languages():
     visible_public_count = 0
     page = 1
     while page <= 10:
-        if REPOS_TOKEN:
-            repos = request_json(f"https://api.github.com/user/repos?per_page=100&page={page}&affiliation=owner&visibility=all", token=REPOS_TOKEN)
-        else:
-            repos = request_json(f"https://api.github.com/users/{USER}/repos?per_page=100&page={page}&type=owner")
+        repos = request_json(f"https://api.github.com/user/repos?per_page=100&page={page}&affiliation=owner&visibility=all", token=LANGUAGE_TOKEN)
         if not isinstance(repos, list):
             raise RuntimeError(f"Unexpected repositories response: {repos}")
         for repo in repos:
@@ -75,14 +62,14 @@ def get_languages():
                 visible_private_count += 1
             else:
                 visible_public_count += 1
-            if repo.get("fork") or repo.get("archived") or (repo.get("private") and not REPOS_TOKEN):
+            if repo.get("fork") or repo.get("archived"):
                 continue
             counted += 1
             if repo.get("private"):
                 private_count += 1
             else:
                 public_count += 1
-            languages = request_json(repo["languages_url"], token=REPOS_TOKEN or PUBLIC_TOKEN)
+            languages = request_json(repo["languages_url"], token=LANGUAGE_TOKEN)
             for language, size in languages.items():
                 if size > 0:
                     totals[language] += size
@@ -92,9 +79,9 @@ def get_languages():
     if not totals:
         raise RuntimeError("No languages returned from repositories visible to the selected token")
     print(f"Token-visible repository totals: {visible_public_count} public, {visible_private_count} private (before fork/archive exclusion).", flush=True)
-    if REPOS_TOKEN and private_count == 0:
+    if private_count == 0:
         if visible_private_count == 0:
-            raise RuntimeError("PROFILE_REPOS_TOKEN cannot see any private repositories. Edit its Repository access scope to All repositories and update the Actions secret if you generated a new token.")
+            raise RuntimeError("PROFILE_ACTIVITY_TOKEN cannot see any private repositories; verify its repository access")
         raise RuntimeError("Private repositories are visible to the token, but all were excluded as forked or archived.")
     print(f"Language API inventory: {public_count} public and {private_count} private repositories (names intentionally omitted).")
     return totals, counted, private_count
@@ -187,7 +174,7 @@ def language_svg(totals, repo_count, private_count):
         rows.append(f'<rect x="185" y="{y-7}" width="{barw:.2f}" height="11" rx="2" fill="{colors[i]}"/>')
         rows.append(f'<text x="636" y="{y+6}" text-anchor="end" fill="#c9d1d9" font-family="Arial,sans-serif" font-size="12">{percentage:.1f}%</text>')
     rows.append('<text x="25" y="340" fill="#8b949e" font-family="Arial,sans-serif" font-size="10">Share of detected language bytes; not proficiency or coding time.</text>')
-    label = "Public + verified private repositories" if REPOS_TOKEN and private_count > 0 else "Public repos only"
+    label = "Public + verified private repositories" if private_count > 0 else "Public repos only"
     return svg_frame("\n".join(rows), width, height, "LANGUAGE INVENTORY", label)
 
 
