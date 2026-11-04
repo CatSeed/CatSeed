@@ -3,7 +3,7 @@
 ### LANGUAGE INVENTORY
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/CatSeed/CatSeed/output/languages.svg" alt="CatSeed programming language distribution" width="100%" />
+  <img src="https://raw.githubusercontent.com/CatSeed/CatSeed/output/languages.svg?v=private-inventory-20261105" alt="CatSeed programming language distribution" width="100%" />
 </p>
 
 ### ACTIVITY MAP
