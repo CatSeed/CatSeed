@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="670" height="355" viewBox="0 0 670 355" role="img" aria-label="LANGUAGE INVENTORY">
+<rect x="0.5" y="0.5" width="669" height="354" rx="6" fill="#0d1117" stroke="#30363d"/>
+<text x="25" y="36" font-family="Arial, sans-serif" font-size="17" font-weight="700" fill="#7ee787">LANGUAGE INVENTORY</text>
+<text x="25" y="59" font-family="Arial, sans-serif" font-size="11" fill="#8b949e">Public + verified private repositories</text>
+<text x="26" y="96" fill="#c9d1d9" font-family="Arial,sans-serif" font-size="13">Python</text>
+<rect x="185" y="82" width="390" height="11" rx="2" fill="#21262d"/>
+<rect x="185" y="82" width="201.95" height="11" rx="2" fill="#39d353"/>
+<text x="636" y="95" text-anchor="end" fill="#c9d1d9" font-family="Arial,sans-serif" font-size="12">51.8%</text>
+<text x="26" y="131" fill="#c9d1d9" font-family="Arial,sans-serif" font-size="13">Java</text>
+<rect x="185" y="117" width="390" height="11" rx="2" fill="#21262d"/>
+<rect x="185" y="117" width="141.27" height="11" rx="2" fill="#7ee787"/>
+<text x="636" y="130" text-anchor="end" fill="#c9d1d9" font-family="Arial,sans-serif" font-size="12">36.2%</text>
+<text x="26" y="166" fill="#c9d1d9" font-family="Arial,sans-serif" font-size="13">C#</text>
+<rect x="185" y="152" width="390" height="11" rx="2" fill="#21262d"/>
+<rect x="185" y="152" width="28.08" height="11" rx="2" fill="#2ea44f"/>
+<text x="636" y="165" text-anchor="end" fill="#c9d1d9" font-family="Arial,sans-serif" font-size="12">7.2%</text>
+<text x="26" y="201" fill="#c9d1d9" font-family="Arial,sans-serif" font-size="13">C</text>
+<rect x="185" y="187" width="390" height="11" rx="2" fill="#21262d"/>
+<rect x="185" y="187" width="5.24" height="11" rx="2" fill="#80cc9a"/>
+<text x="636" y="200" text-anchor="end" fill="#c9d1d9" font-family="Arial,sans-serif" font-size="12">1.3%</text>
+<text x="26" y="236" fill="#c9d1d9" font-family="Arial,sans-serif" font-size="13">HTML</text>
+<rect x="185" y="222" width="390" height="11" rx="2" fill="#21262d"/>
+<rect x="185" y="222" width="3.88" height="11" rx="2" fill="#31724d"/>
+<text x="636" y="235" text-anchor="end" fill="#c9d1d9" font-family="Arial,sans-serif" font-size="12">1.0%</text>
+<text x="26" y="271" fill="#c9d1d9" font-family="Arial,sans-serif" font-size="13">ShaderLab</text>
+<rect x="185" y="257" width="390" height="11" rx="2" fill="#21262d"/>
+<rect x="185" y="257" width="2.54" height="11" rx="2" fill="#a8e5bd"/>
+<text x="636" y="270" text-anchor="end" fill="#c9d1d9" font-family="Arial,sans-serif" font-size="12">0.7%</text>
+<text x="26" y="306" fill="#c9d1d9" font-family="Arial,sans-serif" font-size="13">PowerShell</text>
+<rect x="185" y="292" width="390" height="11" rx="2" fill="#21262d"/>
+<rect x="185" y="292" width="2.05" height="11" rx="2" fill="#267448"/>
+<text x="636" y="305" text-anchor="end" fill="#c9d1d9" font-family="Arial,sans-serif" font-size="12">0.5%</text>
+<text x="25" y="340" fill="#8b949e" font-family="Arial,sans-serif" font-size="10">Share of detected language bytes; not proficiency or coding time.</text>
+</svg>
