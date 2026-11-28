@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="825" height="290" viewBox="0 0 825 290" role="img" aria-label="ACTIVITY MAP">
+<rect x="0.5" y="0.5" width="824" height="289" rx="6" fill="#0d1117" stroke="#30363d"/>
+<text x="25" y="36" font-family="Arial, sans-serif" font-size="17" font-weight="700" fill="#7ee787">ACTIVITY MAP</text>
+<text x="25" y="59" font-family="Arial, sans-serif" font-size="11" fill="#8b949e">GitHub contributions (private-access token)</text>
+<line x1="55" y1="226.0" x2="790" y2="226.0" stroke="#21262d"/>
+<text x="45" y="230.0" text-anchor="end" fill="#8b949e" font-family="Arial,sans-serif" font-size="11">0</text>
+<line x1="55" y1="191.5" x2="790" y2="191.5" stroke="#21262d"/>
+<text x="45" y="195.5" text-anchor="end" fill="#8b949e" font-family="Arial,sans-serif" font-size="11">11</text>
+<line x1="55" y1="157.0" x2="790" y2="157.0" stroke="#21262d"/>
+<text x="45" y="161.0" text-anchor="end" fill="#8b949e" font-family="Arial,sans-serif" font-size="11">22</text>
+<line x1="55" y1="122.5" x2="790" y2="122.5" stroke="#21262d"/>
+<text x="45" y="126.5" text-anchor="end" fill="#8b949e" font-family="Arial,sans-serif" font-size="11">33</text>
+<line x1="55" y1="88.0" x2="790" y2="88.0" stroke="#21262d"/>
+<text x="45" y="92.0" text-anchor="end" fill="#8b949e" font-family="Arial,sans-serif" font-size="11">44</text>
+<text x="55.0" y="247" text-anchor="middle" fill="#8b949e" font-family="Arial,sans-serif" font-size="11">Oct 29</text>
+<text x="226.5" y="247" text-anchor="middle" fill="#8b949e" font-family="Arial,sans-serif" font-size="11">Nov 05</text>
+<text x="398.0" y="247" text-anchor="middle" fill="#8b949e" font-family="Arial,sans-serif" font-size="11">Nov 12</text>
+<text x="569.5" y="247" text-anchor="middle" fill="#8b949e" font-family="Arial,sans-serif" font-size="11">Nov 19</text>
+<text x="790.0" y="247" text-anchor="middle" fill="#8b949e" font-family="Arial,sans-serif" font-size="11">Nov 28</text>
+<defs><linearGradient id="area" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#39d353" stop-opacity="0.30"/><stop offset="1" stop-color="#39d353" stop-opacity="0.015"/></linearGradient></defs>
+<path d="M55.00,200.91 L79.50,200.91 L104.00,222.86 L128.50,147.59 L153.00,188.36 L177.50,153.86 L202.00,125.64 L226.50,128.77 L251.00,188.36 L275.50,213.45 L300.00,191.50 L324.50,213.45 L349.00,169.55 L373.50,204.05 L398.00,197.77 L422.50,157.00 L447.00,147.59 L471.50,191.50 L496.00,169.55 L520.50,175.82 L545.00,185.23 L569.50,219.73 L594.00,188.36 L618.50,216.59 L643.00,160.14 L667.50,182.09 L692.00,131.91 L716.50,191.50 L741.00,97.41 L765.50,182.09 L790.00,213.45 L790,226 L55,226 Z" fill="url(#area)"/>
+<path d="M55.00,200.91 L79.50,200.91 L104.00,222.86 L128.50,147.59 L153.00,188.36 L177.50,153.86 L202.00,125.64 L226.50,128.77 L251.00,188.36 L275.50,213.45 L300.00,191.50 L324.50,213.45 L349.00,169.55 L373.50,204.05 L398.00,197.77 L422.50,157.00 L447.00,147.59 L471.50,191.50 L496.00,169.55 L520.50,175.82 L545.00,185.23 L569.50,219.73 L594.00,188.36 L618.50,216.59 L643.00,160.14 L667.50,182.09 L692.00,131.91 L716.50,191.50 L741.00,97.41 L765.50,182.09 L790.00,213.45" fill="none" stroke="#39d353" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="55.00" cy="200.91" r="2.8" fill="#7ee787"/>
+<circle cx="79.50" cy="200.91" r="2.8" fill="#7ee787"/>
+<circle cx="104.00" cy="222.86" r="2.8" fill="#7ee787"/>
+<circle cx="128.50" cy="147.59" r="2.8" fill="#7ee787"/>
+<circle cx="153.00" cy="188.36" r="2.8" fill="#7ee787"/>
+<circle cx="177.50" cy="153.86" r="2.8" fill="#7ee787"/>
+<circle cx="202.00" cy="125.64" r="2.8" fill="#7ee787"/>
+<circle cx="226.50" cy="128.77" r="2.8" fill="#7ee787"/>
+<circle cx="251.00" cy="188.36" r="2.8" fill="#7ee787"/>
+<circle cx="275.50" cy="213.45" r="2.8" fill="#7ee787"/>
+<circle cx="300.00" cy="191.50" r="2.8" fill="#7ee787"/>
+<circle cx="324.50" cy="213.45" r="2.8" fill="#7ee787"/>
+<circle cx="349.00" cy="169.55" r="2.8" fill="#7ee787"/>
+<circle cx="373.50" cy="204.05" r="2.8" fill="#7ee787"/>
+<circle cx="398.00" cy="197.77" r="2.8" fill="#7ee787"/>
+<circle cx="422.50" cy="157.00" r="2.8" fill="#7ee787"/>
+<circle cx="447.00" cy="147.59" r="2.8" fill="#7ee787"/>
+<circle cx="471.50" cy="191.50" r="2.8" fill="#7ee787"/>
+<circle cx="496.00" cy="169.55" r="2.8" fill="#7ee787"/>
+<circle cx="520.50" cy="175.82" r="2.8" fill="#7ee787"/>
+<circle cx="545.00" cy="185.23" r="2.8" fill="#7ee787"/>
+<circle cx="569.50" cy="219.73" r="2.8" fill="#7ee787"/>
+<circle cx="594.00" cy="188.36" r="2.8" fill="#7ee787"/>
+<circle cx="618.50" cy="216.59" r="2.8" fill="#7ee787"/>
+<circle cx="643.00" cy="160.14" r="2.8" fill="#7ee787"/>
+<circle cx="667.50" cy="182.09" r="2.8" fill="#7ee787"/>
+<circle cx="692.00" cy="131.91" r="2.8" fill="#7ee787"/>
+<circle cx="716.50" cy="191.50" r="2.8" fill="#7ee787"/>
+<circle cx="741.00" cy="97.41" r="2.8" fill="#7ee787"/>
+<circle cx="765.50" cy="182.09" r="2.8" fill="#7ee787"/>
+<circle cx="790.00" cy="213.45" r="2.8" fill="#7ee787"/>
+<text x="790" y="59" text-anchor="end" fill="#c9d1d9" font-family="Arial,sans-serif" font-size="12">Total: 462</text>
+<text x="25" y="273" fill="#8b949e" font-family="Arial,sans-serif" font-size="11">GitHub contribution calendar, last 31 days</text>
+</svg>
